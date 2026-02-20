@@ -114,4 +114,5 @@ if (track && nextButton && prevButton && dotsNav) {
         if (touchStartX - touchEndX > 50) nextButton.click();
         if (touchStartX - touchEndX < -50) prevButton.click();
     });
+
 }
