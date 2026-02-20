@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анкета — Я студент ВШЭ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="parallax-bg"></div>
+    <div id="scrollProgress"></div>
+    <div id="cursorTrail"></div>
+
+    <header class="site-header">
+        <nav class="navbar">
+            <div class="nav-logo">Обратная связь</div>
+            <ul class="nav-links">
+                <li><a href="index.html">На главную</a></li>
+            </ul>
+            <button id="themeToggle" aria-label="Сменить тему">
+                <img src="https://img.icons8.com/ios-filled/50/132a63/sun--v1.png" class="sun" alt="Light Mode">
+                <img src="https://img.icons8.com/ios-filled/50/c6a75e/moon-symbol.png" class="moon" alt="Dark Mode">
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="feedback-section">
+            <h2>Анкета студента/гостя</h2>
+            <p>Заполните форму, чтобы оставить отзыв или задать вопрос.</p>
+            
+            <form class="feedback-form" action="index.html" method="POST">
+                <div class="form-group">
+                    <label for="name">Ваше имя</label>
+                    <input type="text" id="name" name="name" placeholder="Иван Иванов" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Электронная почта</label>
+                    <input type="email" id="email" name="email" placeholder="student@edu.hse.ru" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Кто вы?</label>
+                    <select id="status" name="status">
+                        <option value="student-miem">Студент МИЭМ</option>
+                        <option value="student-hse">Студент другого факультета ВШЭ</option>
+                        <option value="abiturient">Абитуриент</option>
+                        <option value="other">Просто заглянул</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Насколько полезен контент?</label>
+                    <div class="option-container">
+                        <label class="option-item">
+                            <input type="radio" name="utility" value="very" checked> 
+                            <span>Очень полезен</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="utility" value="neutral"> 
+                            <span>Средне</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="utility" value="not-really"> 
+                            <span>Совсем нет</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Что вам понравилось?</label>
+                    <div class="option-container">
+                        <label class="option-item">
+                            <input type="checkbox" name="likes" value="design"> 
+                            <span>Дизайн страницы</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="likes" value="info"> 
+                            <span>Информация об учёбе</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Ваше сообщение</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Напишите здесь..."></textarea>
+                </div>
+
+                <button type="submit" class="details-btn submit-btn">Отправить анкету</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p><small>© 2026, Проект «Я — студент ВШЭ»</small></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
