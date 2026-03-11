@@ -157,15 +157,21 @@ if (track && nextButton && prevButton && dotsNav) {
 
     function addMessage(text, type, isAudio = false) {
         if (!chatMessages) return;
+
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${type}-msg`;
+
         if (isAudio) {
             const audio = document.createElement('audio');
-            audio.controls = true; audio.src = text;
+            audio.controls = true;
+            audio.src = text;
+            audio.style.width = "200px";
+            audio.style.display = "block";
             msgDiv.appendChild(audio);
         } else {
             msgDiv.textContent = text;
         }
+
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -221,9 +227,10 @@ if (track && nextButton && prevButton && dotsNav) {
                     mediaRecorder = new MediaRecorder(stream);
                     mediaRecorder.ondataavailable = e => chunks.push(e.data);
                     mediaRecorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
-                        addMessage(URL.createObjectURL(blob), 'user', true);
-                        handleBotResponse("", true);
+                        const blob = new Blob(chunks, { type: 'audio/webm' }); 
+                        const audioUrl = URL.createObjectURL(blob);
+                        addMessage(audioUrl, 'user', true); 
+                        handleBotResponse("", true); 
                         chunks = [];
                     };
                     mediaRecorder.start();
@@ -236,3 +243,4 @@ if (track && nextButton && prevButton && dotsNav) {
         };
     }
 };
+
