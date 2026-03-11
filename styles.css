@@ -883,3 +883,74 @@ input:focus, textarea:focus, select:focus {
         padding: 15px;
     }
 }
+
+/* Карта и чат расположение */
+.floating-widget {
+    position: fixed;
+    bottom: 30px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.map-left { left: 30px; }
+.chat-right { right: 30px; align-items: flex-end; }
+
+.widget-content {
+    display: none;
+    margin-bottom: 15px;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 320px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+.widget-content.active { display: block; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* стили кнопок для карты и чата */
+.widget-toggle, #sendMessage {
+    position: relative;
+    overflow: hidden;
+    padding: 14px 28px;
+    background: var(--accent);
+    color: #fff !important;
+    border-radius: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+.widget-toggle::before, #sendMessage::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.6s;
+    z-index: -1;
+}
+
+.widget-toggle:hover::before, #sendMessage:hover::before { left: 100%; }
+.widget-toggle:hover { transform: translateY(-5px); filter: brightness(1.1); }
+
+/* чат */
+.chat-messages { height: 280px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+.message { padding: 10px 15px; border-radius: 16px; max-width: 85%; font-size: 0.95rem; }
+.user-msg { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.bot-msg { background: var(--soft); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+
+.chat-input-area { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+#sendMessage { width: 45px; height: 45px; padding: 0; flex-shrink: 0; }
+.voice-btn { background: none; border: 1px solid var(--border); border-radius: 12px; width: 45px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+.voice-btn:hover { background: var(--soft); }

@@ -1,3 +1,4 @@
+window.onload = () => {
 /* Тема */
 const themeToggle = document.getElementById("themeToggle");
 const body = document.body;
@@ -116,3 +117,122 @@ if (track && nextButton && prevButton && dotsNav) {
     });
 
 }
+
+
+    /* карта и чат */
+    let mapInitialized = false;
+    const toggleMapBtn = document.getElementById('toggleMap');
+    const mapContainer = document.getElementById('mapContainer');
+
+    if (toggleMapBtn) {
+        toggleMapBtn.onclick = () => {
+            mapContainer.classList.toggle('active');
+            if (!mapInitialized) {
+                new ol.Map({
+                    target: 'map',
+                    layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+                    view: new ol.View({
+                        center: ol.proj.fromLonLat([37.4099, 55.8033]), 
+                        zoom: 17
+                    })
+                });
+                mapInitialized = true;
+            }
+        };
+    }
+
+    const toggleChatBtn = document.getElementById('toggleChat');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendMessage');
+    const recordBtn = document.getElementById('recordVoice');
+
+    let chatOpenedOnce = false;
+    const keywords = {
+        "привет": ["Привет! 👋 Как дела с учебой?", "Здравствуй! Рад видеть тебя на странице."],
+        "миэм": ["МИЭМ — мой второй дом!", "Лучший кампус Вышки, согласен?"],
+        "вкр": ["ВКР в процессе... Это сложно, но интересно!", "Пишу код для практической части ВКР."]
+    };
+
+    function addMessage(text, type, isAudio = false) {
+        if (!chatMessages) return;
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${type}-msg`;
+        if (isAudio) {
+            const audio = document.createElement('audio');
+            audio.controls = true; audio.src = text;
+            msgDiv.appendChild(audio);
+        } else {
+            msgDiv.textContent = text;
+        }
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function handleBotResponse(userInput, isVoice = false) {
+        setTimeout(() => {
+            let reply = "Мысль интересная, но я сейчас очень занят написанием ВКР, давай обсудим это чуть позже! 🎓";
+            if (!isVoice) {
+                const lower = userInput.toLowerCase();
+                for (let key in keywords) {
+                    if (lower.includes(key)) {
+                        reply = keywords[key][Math.floor(Math.random() * keywords[key].length)];
+                        break;
+                    }
+                }
+            }
+            addMessage(reply, 'bot');
+        }, 1000);
+    }
+
+    if (toggleChatBtn) {
+        toggleChatBtn.onclick = () => {
+            chatContainer.classList.toggle('active');
+            if (!chatOpenedOnce) {
+                setTimeout(() => addMessage("Привет! 👋 Я автор этой страницы. Спроси меня про МИЭМ или ВКР!", "bot"), 600);
+                chatOpenedOnce = true;
+            }
+        };
+    }
+
+    if (sendBtn) {
+        sendBtn.onclick = () => {
+            const val = chatInput.value.trim();
+            if (val) {
+                addMessage(val, 'user');
+                handleBotResponse(val);
+                chatInput.value = '';
+            }
+        };
+    }
+
+    if (chatInput) {
+        chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendBtn.click(); };
+    }
+
+    let mediaRecorder;
+    let chunks = [];
+    if (recordBtn) {
+        recordBtn.onclick = async () => {
+            if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+                        addMessage(URL.createObjectURL(blob), 'user', true);
+                        handleBotResponse("", true);
+                        chunks = [];
+                    };
+                    mediaRecorder.start();
+                    recordBtn.textContent = "🛑";
+                } catch (err) { alert("Микрофон недоступен"); }
+            } else {
+                mediaRecorder.stop();
+                recordBtn.textContent = "🎤";
+            }
+        };
+    }
+};
